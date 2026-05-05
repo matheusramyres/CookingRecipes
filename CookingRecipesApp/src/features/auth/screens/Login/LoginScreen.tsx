@@ -17,12 +17,17 @@ import {
 import { LoginForm, loginSchema } from '../../schemas/SchemaLogin';
 
 export function LoginScreen() {
-  const { control, handleSubmit } = useForm<LoginForm>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       login: '',
       password: '',
     },
+    mode: 'onChange',
   });
 
   function onSubmit(data: LoginForm) {
@@ -80,6 +85,7 @@ export function LoginScreen() {
             <Button
               textButton="Entrar"
               style={styles.enterButton}
+              disabled={!isValid}
               onPress={handleSubmit(onSubmit, onInvalid)}
             />
 
