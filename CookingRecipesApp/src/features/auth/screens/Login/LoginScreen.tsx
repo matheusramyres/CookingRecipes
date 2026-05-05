@@ -1,6 +1,9 @@
 import logo from '@/assets/images/logo.png';
+import { Screen } from '@/shared/components/layout/Screen';
 import { Button } from '@/shared/components/ui/Button';
 import { Input } from '@/shared/components/ui/Input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Image,
   KeyboardAvoidingView,
@@ -11,9 +14,25 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Screen } from '../../../shared/components/layout/Screen';
+import { LoginForm, loginSchema } from '../../schemas/SchemaLogin';
 
 export function LoginScreen() {
+  const { control, handleSubmit } = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      login: '',
+      password: '',
+    },
+  });
+
+  function onSubmit(data: LoginForm) {
+    console.log('SUCESSO:', data);
+  }
+
+  function onInvalid(errors: any) {
+    console.log('ERROS:', errors);
+  }
+
   return (
     <Screen>
       <KeyboardAvoidingView
@@ -28,13 +47,46 @@ export function LoginScreen() {
 
           <View style={styles.containerForm}>
             <Text style={styles.textContainerForm}>Entrar</Text>
-            <Input label="Login" placeholder="Digite seu login" />
-            <Input variation="password" label="Senha" placeholder="Digite sua senha" />
-            <Button textButton="Entrar" style={styles.enterButton} />
+
+            <Controller
+              control={control}
+              name="login"
+              render={({ field, fieldState }) => (
+                <Input
+                  label="Login"
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  errorMessage={fieldState.error?.message}
+                  placeholder="Digite seu login"
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <Input
+                  variation="password"
+                  label="Senha"
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  errorMessage={fieldState.error?.message}
+                  placeholder="Digite sua senha"
+                />
+              )}
+            />
+
+            <Button
+              textButton="Entrar"
+              style={styles.enterButton}
+              onPress={handleSubmit(onSubmit, onInvalid)}
+            />
 
             <View style={styles.textContainer}>
               <Text style={styles.textAsk}>Não tem uma conta?</Text>
               <Pressable
+                onPress={() => console.log('Próxima pagina')}
                 style={({ pressed }) => ({
                   opacity: pressed ? 0.5 : 1,
                 })}>
@@ -51,7 +103,6 @@ export function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FBF8F1',
   },
   logo: {
     marginTop: 54,
@@ -68,7 +119,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   description: {
-    fontWeight: 'regular',
+    fontWeight: 400,
     fontSize: 14,
     color: '#6D6059',
     marginTop: 8,
@@ -79,7 +130,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     marginTop: 86,
-    paddingInline: 24,
+    paddingHorizontal: 24,
     paddingTop: 32,
   },
   textContainerForm: {
@@ -101,7 +152,7 @@ const styles = StyleSheet.create({
   },
   textCreateAccount: {
     fontSize: 14,
-    fontWeight: 'semibold',
+    fontWeight: 600,
     color: '#E46212',
   },
 });

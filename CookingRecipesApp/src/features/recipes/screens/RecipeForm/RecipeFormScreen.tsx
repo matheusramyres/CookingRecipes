@@ -1,5 +1,5 @@
+import { Screen } from '@/shared/components/layout/Screen';
 import { Text } from 'react-native';
-import { Screen } from '../../../shared/components/layout/Screen';
 
 export function RecipeFormScreen() {
   return (
