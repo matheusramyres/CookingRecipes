@@ -15,8 +15,17 @@ import {
   View,
 } from 'react-native';
 import { LoginForm, loginSchema } from '../../schemas/SchemaLogin';
+import { api } from '@/shared/services/api';
+import { useMutation } from '@tanstack/react-query';
+import { useAuthStore } from '../../store/useAuthStore';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@/navigation/types';
 
 export function LoginScreen() {
+  type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
+  const navigation = useNavigation<NavigationProps>();
+
   const {
     control,
     handleSubmit,
@@ -30,8 +39,28 @@ export function LoginScreen() {
     mode: 'onChange',
   });
 
-  function onSubmit(data: LoginForm) {
-    console.log('SUCESSO:', data);
+  const signIn = useAuthStore(state => state.signIn);
+
+  const loginMutation = useMutation({
+    mutationFn: async (data: LoginForm) => {
+      const response = await api.post('/auth/login', {
+        login: data.login,
+        password: data.password,
+      });
+
+      return response.data;
+    },
+    onSuccess: data => {
+      signIn(data.accessToken, data.user);
+      navigation.replace('Home');
+    },
+    onError: error => {
+      console.log('====ERRO NO LOGIN:', error);
+    },
+  });
+
+  async function onSubmit(data: LoginForm) {
+    loginMutation.mutate(data);
   }
 
   function onInvalid(errors: any) {
@@ -43,7 +72,7 @@ export function LoginScreen() {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={styles.scrollView} keyboardShouldPersistTaps="handled">
           <View style={styles.contentInfo}>
             <Image source={logo} style={styles.logo} />
             <Text style={styles.title}>Minhas Receitas</Text>
@@ -83,9 +112,9 @@ export function LoginScreen() {
             />
 
             <Button
-              textButton="Entrar"
+              textButton={loginMutation.isPending ? 'Entrando...' : 'Entrar'}
               style={styles.enterButton}
-              disabled={!isValid}
+              disabled={!isValid || loginMutation.isPending}
               onPress={handleSubmit(onSubmit, onInvalid)}
             />
 
@@ -109,6 +138,9 @@ export function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollView: {
+    flexGrow: 1,
   },
   logo: {
     marginTop: 54,

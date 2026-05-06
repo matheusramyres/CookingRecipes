@@ -18,13 +18,12 @@ export function ReturnButton({ variant = 'primary', style, ...rest }: ButtonProp
         styles.buttonContainer,
         typeof style === 'function' ? style(state) : style,
         {
-          backgroundColor:
-            variant === 'primary' ? 'backgroundColor: rgba(255, 255, 255, 0.2)' : '#F1E3C7',
+          backgroundColor: variant === 'primary' ? 'rgba(255, 255, 255, 0.2)' : '#F1E3C7',
         },
         { opacity: state.pressed ? 0.5 : 1 },
       ]}
-      onPress={goBackPage}
-      {...rest}>
+      {...rest}
+      onPress={goBackPage}>
       <ArrowLeft size={20} color={variant === 'primary' ? '#ffffff' : '#2A1F19'} />
     </Pressable>
   );

@@ -5,25 +5,49 @@ import { Pressable, StyleSheet, Text, TextInput, TextInputProps, View } from 're
 interface InputProps extends TextInputProps {
   label: string;
   variation?: 'input' | 'password';
+  background?: 'primary' | 'secondary';
+  errorMessage?: string;
 }
 
-export function Input({ label, variation, placeholder }: InputProps) {
+export function Input({
+  label,
+  variation,
+  background = 'primary',
+  placeholder,
+  style,
+  errorMessage,
+  ...rest
+}: InputProps) {
   const isPassword = variation === 'password';
   const [showPassword, setShowPassword] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const borderColorState = errorMessage ? '#f50000ff' : isFocused ? '#d6b980' : '#F1E3C7';
+  const backgroundColor = background === 'secondary' ? '#fff' : '#F1E3C7';
 
   function togglePassword() {
     setShowPassword(prev => !prev);
   }
 
   return (
-    <View style={styles.inputContainer}>
-      <Text>{label}</Text>
-      <View style={styles.boxConatiner}>
+    <View style={styles.container}>
+      <Text style={styles.label}>{label}</Text>
+      <View
+        style={[
+          styles.boxConatiner,
+          style,
+          { backgroundColor: backgroundColor },
+          { borderColor: borderColorState },
+        ]}>
         <TextInput
           placeholder={placeholder}
           style={styles.input}
           secureTextEntry={isPassword && !showPassword}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          {...rest}
         />
+
         {isPassword && (
           <Pressable
             onPress={togglePassword}
@@ -33,20 +57,26 @@ export function Input({ label, variation, placeholder }: InputProps) {
           </Pressable>
         )}
       </View>
+
+      {errorMessage !== undefined && <Text style={{ color: '#f50000ff' }}>{errorMessage}</Text>}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
+  container: {
     marginTop: 30,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: 500,
   },
   boxConatiner: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F1E3C7',
     borderRadius: 20,
+    borderWidth: 1,
     paddingHorizontal: 15,
     gap: 10,
     marginTop: 12,

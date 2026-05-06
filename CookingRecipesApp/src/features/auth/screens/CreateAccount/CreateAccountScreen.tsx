@@ -15,10 +15,10 @@ import {
   View,
 } from 'react-native';
 import { CreateAccountForm, schemaCreateAccount } from '../../schemas/SchemaCreateAccount';
-import { ReturnButton } from '@/shared/components/ui/ReturnButton';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/navigation/types';
+import { Header } from '@/shared/components/ui/Header';
 
 export function CreateAccountScreen() {
   const {
@@ -48,10 +48,7 @@ export function CreateAccountScreen() {
 
   return (
     <Screen>
-      <View style={styles.backButtonHeader}>
-        <ReturnButton variant="secondary" />
-        <Text style={styles.textGoBack}>Voltar</Text>
-      </View>
+      <Header title="Voltar" variant="secondary" />
 
       <KeyboardAvoidingView
         style={styles.container}
@@ -135,13 +132,6 @@ export function CreateAccountScreen() {
 }
 
 const styles = StyleSheet.create({
-  backButtonHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-    paddingTop: 16,
-    paddingLeft: 16,
-  },
   container: {
     flex: 1,
     paddingHorizontal: 24,
@@ -158,11 +148,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-  },
-  textGoBack: {
-    color: '#2A1F19',
-    fontSize: 18,
-    fontWeight: 600,
   },
   title: {
     fontWeight: 'bold',
