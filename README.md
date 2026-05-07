@@ -29,7 +29,7 @@ cd cooking-recips-back
 ### Instale as dependências:
 
 ```bash
-yarn install
+npm install
 ```
 
 ### Na raiz do cooking-recips-back, crie o arquivo .env:
@@ -48,7 +48,7 @@ JWT_SECRET=receitas_secret_key
 Inicie o servidor:
 
 ```bash
-yarn start:dev
+npm start:dev
 ```
 
 ### A API ficará disponível em:
