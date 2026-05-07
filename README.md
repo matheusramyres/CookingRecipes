@@ -89,9 +89,9 @@ yarn start
 yarn android
 ```
 
-### Gerar APK Android
+## Gerar APK Android
 
-## Entre na pasta Android:
+### Entre na pasta Android:
 
 ```bash
 cd CookingRecipesApp/android
