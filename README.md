@@ -2,8 +2,9 @@
 
 ## Pré-requisitos
 
-- Node.js instalado
-- MySQL instalado e rodando
+- Node.js instalado versão 22.20.0
+- Yarn instalado
+- Docker instalado
 - Android Studio instalado
 - JDK configurado
 - Emulador Android ou celular físico com depuração USB ativada
@@ -12,27 +13,34 @@
 
 ## Backend
 
-Entre na pasta do backend:
+### Na raiz da pasta CookingRecipes
 
 ```bash
-cd backend
+
+docker compose up -d
+
 ```
 
+### Entre na pasta do backend cooking-recips-back
+
+```bash
+cd cooking-recips-back
+```
 ### Instale as dependências:
 
 ```bash
-npm install
+yarn install
 ```
 
-### Crie o arquivo .env com base no .env.example:
+### Na raiz do cooking-recips-back, crie o arquivo .env:
 
 ```bash
-PORT=3000
-DATABASE_HOST=localhost
-DATABASE_PORT=3306
-DATABASE_USER=root
-DATABASE_PASSWORD=sua_senha
-DATABASE_NAME=recipes_db
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=root
+DB_DATABASE=teste_receitas_rg_sistemas
+JWT_SECRET=receitas_secret_key
 ```
 
 ### Rode as migrations ou sincronize o banco, conforme a configuração do projeto.
@@ -40,10 +48,10 @@ DATABASE_NAME=recipes_db
 Inicie o servidor:
 
 ```bash
-npm run start:dev
+yarn start:dev
 ```
 
-A API ficará disponível em:
+### A API ficará disponível em:
 
 http://localhost:3000
 
@@ -52,13 +60,13 @@ http://localhost:3000
 ### Entre na pasta do app:
 
 ```bash
-cd mobile
+cd CookingRecipesApp
 ```
 
 ### Instale as dependências:
 
 ```bash
-npm install
+yarn install
 ```
 
 ### Instale as dependências nativas do Android:
@@ -72,13 +80,13 @@ cd ..
 ### Inicie o Metro Bundler:
 
 ```bash
-npm start
+yarn start
 ```
 
 ### Em outro terminal, rode o app no Android:
 
 ```bash
-npm run android
+yarn android
 ```
 
 ### Gerar APK Android
@@ -86,7 +94,7 @@ npm run android
 ## Entre na pasta Android:
 
 ```bash
-cd mobile/android
+cd CookingRecipesApp/android
 ```
 
 ### Gere o APK:
@@ -95,7 +103,7 @@ gradlew assembleRelease
 
 O APK será gerado em:
 
-mobile/android/app/build/outputs/apk/release/app-release.apk
+CookingRecipesApp/android/app/build/outputs/apk/release/app-release.apk
 Observação sobre API no Android
 
 Se estiver usando emulador Android, a URL da API no app deve apontar para:
