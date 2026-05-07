@@ -26,6 +26,7 @@ docker compose up -d
 ```bash
 cd cooking-recips-back
 ```
+
 ### Instale as dependências:
 
 ```bash
@@ -99,7 +100,9 @@ cd CookingRecipesApp/android
 
 ### Gere o APK:
 
+```bash
 gradlew assembleRelease
+```
 
 O APK será gerado em:
 
